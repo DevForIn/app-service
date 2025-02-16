@@ -1,0 +1,107 @@
+server:
+  port: 8089  # 원하는 포트 번호로 설정
+spring:
+  application:
+    name: underwriting-service
+  datasource:
+#    url: jdbc:postgresql://192.168.0.100:5432/kb_life
+#    username: kblife
+#    password: ENC(YWxXmGdHvMi+nd5ZUEKedgPxtkXQXav3)
+    url: jdbc:postgresql://service-cognet-postgresql-kblife.postgres.database.azure.com:5432/postgres
+    username: postgre
+    password: ENC(pDK13Xg/4wnBR4p6M/5TagDVcvcFoOU6)
+    driverClassName: org.postgresql.Driver
+    hikari:
+      connection-timeout: 4000
+      validation-timeout: 3000
+      idle-timeout: 160000
+      max-lifetime: 175000
+      minimum-idle: 5
+      maximum-pool-size: 1000
+      pool-name: BaseHikariPool
+  #----------------------------------------------------------------------------------------------
+  # jpa configuration
+  #----------------------------------------------------------------------------------------------
+  jpa:
+    open-in-view: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        jdbc.time_zone: Asia/Seoul
+#        default_schema: "\"LOCAL\""
+        default_schema: "\"UQA\""
+    hibernate:
+      ddl-auto: none
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: com.mooo.devforin.appservice.config.querydsl.NamingStrategyConfig
+
+token:
+  expire:
+    # 5분
+    time: 1209600000 # (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h) * 24L(h -> 하루) * 14(2주))
+#    time: 300000
+#    time : 5000
+  secret : thisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkey
+
+jasypt:
+  encryptor:
+    password: "KBLIFE-genAI"
+
+api:
+  key:
+    header: KBLIFE-UND-API-KEY
+    value: y7nR4vaxHw7vyUGK7AdNfkg6b4n3bNUAtv9ZBX1z12Q
+
+plugnet:
+  multiIntent:
+    path: http://20.249.169.89/serving/22312351e57c4513868548faac8053ce/
+    api-key: 0eF9_BWoGTMONCTv1MDgwXiytF29WRRS64nKFlGD9JcgDyKyc5r8VYmpgrye-Bxk
+  intent-cutt:
+    path: http://20.249.169.89/serving/f8ee6a0a984b4a3d92eabdd3e6dd2b4e/
+    api-key: OpQr1y4HuOnK9j5kToczgJrHRsoyX9khWPizDGfFNGLAW7C8klF5Bgsjb3M2PiXx
+  general-review:
+    path: http://20.249.169.89/serving/54b737186be84b94b75a2e62873bf609/
+    api-key: nhtdRFVXyC6OgoQ-27lZgQZKVCHWFvVRohq1hRCE202Y--0Xq3uGyK9Qbxto0nCC
+  business-review:
+    path: http://20.249.169.89/serving/8f8a9f2f6db84be59a2cf71a07e40576/
+    api-key: 5yg4CJQxM2B7wAelDGtdgOXnaxoAyx_7szzY0iOSP3ZX5R7TikjfsVvxQ3Wa1JwH
+  simplified-review:
+    path: http://20.249.169.89/serving/e29e8d0ff9954a09a9ff3d4af4c51b0e/
+    api-key: yyLc1NNx0fZHq5oK_z5L68y4RAT8xLPBimtwOBKCPaQ-eWKUm9Ic37VhIru2JLCy
+  all-answer:
+    path: http://20.249.169.89/serving/35edaf10ff4f460d8edf819cb4ab4b4d/
+    api-key: EqexCXq3ZcMOWgXtsDJPF4G7FXIgOqp9NpAC74vxWFIR8NTvVMSQGLDuw6aaHy6Q
+  process:
+    path: http://20.249.169.89/serving/a8aea7a3f1c64b139f23bf6d0cb7f85e/
+    api-key: VlOYy3ssflN1NxaY0bGA8-M1nhYgSjCxIyTPJkc2boGnh96oaplaBVW-9rH7Q97t
+  product:
+    path: http://20.249.169.89/serving/7447eda19cbd4d4bb7a0cc173255a794/
+    api-key: qm9IlStFToTyLBUzu-UU_6qesK7V66RLfSk9TlJbMgAzxheAc6pRfY9_5dnReXrk
+  final-result:
+    path: http://20.249.169.89/serving/82a484c267b24deda1c8713fd97eb8b6/
+    api-key: 0Q1leyhYQ5_yDy47Urlq-33TDcPkack8U5H3LdjREjGcPlpXR7yKQmAqgJhsOoWN
+  multiTurn:
+    path: http://20.249.169.89/serving/24f86b2b4755486bb2a805cc578e24e3/
+    api-key: qVXfBI3YDX10pia3Z7dn2Sq6EF5GlH_vMsDfFNN8RNsPq5HmVKGSnzhiKLDi4Hn4
+
+#Swagger
+springdoc:
+  version: '@project.version@'
+  api-docs:
+    path: /api-docs
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    operations-sorter: alpha
+    tags-sorter: alpha
+    path: /swagger-ui.html
+    disable-swagger-default-url: true
+    display-query-params-without-oauth2: true
+    doc-expansion: none
+  paths-to-match:
+    - /**
+    - /api/v1/auth/login
