@@ -1,0 +1,10 @@
+//pluginManagement {
+//    repositories {
+//        maven {
+//            url "http://20.39.185.111:8081/repository/maven-release-gai/" // Nexus repository url
+//            allowInsecureProtocol true // http 통신
+//        }
+//    }
+//}
+
+rootProject.name = 'app-service'
