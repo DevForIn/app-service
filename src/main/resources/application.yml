@@ -4,12 +4,9 @@ spring:
   application:
     name: underwriting-service
   datasource:
-#    url: jdbc:postgresql://192.168.0.100:5432/kb_life
-#    username: kblife
-#    password: ENC(YWxXmGdHvMi+nd5ZUEKedgPxtkXQXav3)
-    url: jdbc:postgresql://service-cognet-postgresql-kblife.postgres.database.azure.com:5432/postgres
-    username: postgre
-    password: ENC(pDK13Xg/4wnBR4p6M/5TagDVcvcFoOU6)
+    url: ENC(om+2ux4e96KL8CySyGpO4dM3iix3AFx1lZQrgj6XPJHj58l9KbizSTd5yfhd59JF/t11yBzW9dzsWooaoEWkkg==)
+    username: ENC(usSJOkRcEbRtzTiq89Al4QN1ouQxiP6R)
+    password: ENC(r0VtIaTFv2Y7SLKvzK3EHqEG/imBAb72)
     driverClassName: org.postgresql.Driver
     hikari:
       connection-timeout: 4000
