@@ -28,8 +28,6 @@ spring:
         format_sql: true
         show_sql: true
         jdbc.time_zone: Asia/Seoul
-#        default_schema: "\"LOCAL\""
-        default_schema: "\"UQA\""
     hibernate:
       ddl-auto: none
       naming:
