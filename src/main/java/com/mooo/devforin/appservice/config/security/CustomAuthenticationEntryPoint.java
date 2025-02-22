@@ -5,12 +5,14 @@ import com.mooo.devforin.appservice.config.global.ResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
@@ -22,6 +24,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setContentType("application/json");
 
         // JSON 형식으로 에러 메시지 반환
+        log.error("🚨 인증 실패: 요청 URL = {}, 메세지 = {}", request.getRequestURI(), authException.getMessage());
         response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseUtil.ERROR(401,"Authentication failed", authException.getMessage())));
     }
 }
