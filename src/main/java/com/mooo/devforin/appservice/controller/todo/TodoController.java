@@ -19,4 +19,13 @@ public class TodoController {
         log.info("get List Controller.");
       return ResponseUtil.SUCCESS(200, "Get List !", null);
     }
+
+    @GetMapping("/test-log")
+    public String testLog() {
+        log.info("✅ INFO 로그 출력 확인");
+        log.warn("⚠️ WARN 로그 출력 확인");
+        log.error("❌ ERROR 로그 출력 확인");
+        return "로그 확인 완료!";
+    }
+
 }
