@@ -45,9 +45,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 .credentialsNonExpired(jwtUtil.validateToken(token, userDetails))
                 .build();
 
+        // 로그인 성공 시 사용자 정보 로깅
+        log.info("✅ 로그인 성공! ID: {}", ((CustomUserDetails) authentication.getPrincipal()).getId());
+        log.info("✅ 로그인 성공! Name: {}", authentication.getName());
 
         // JSON 형식으로 응답
         response.setContentType("application/json");
         response.getWriter().write(new ObjectMapper().writeValueAsString(ResponseUtil.SUCCESS(200,"Authorization Success", customUserDetailsDto)));
+
+
     }
 }
