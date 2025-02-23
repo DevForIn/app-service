@@ -27,5 +27,4 @@ public class TodoController {
         log.error("❌ ERROR 로그 출력 확인");
         return "로그 확인 완료!";
     }
-
 }

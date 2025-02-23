@@ -21,7 +21,7 @@ public enum ApiResponseStatus {
 	SAVE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), "저장시 내부 오류가 발생했습니다."),
 	NOT_FOUND_ERROR(HttpStatus.OK, 204, "정보가 존재하지 않습니다."),
 	USER_STTS_REG_ERROR(HttpStatus.OK, 204, "미등록 사용자 입니다."),
-	ERROR_CASE_UNKNOWN(HttpStatus.OK,999,"무슨 에러일지 찾아야함");
+	ERROR_CASE_UNKNOWN(HttpStatus.OK,999,"무슨 에러일지 찾아야함")
 	;
 
 

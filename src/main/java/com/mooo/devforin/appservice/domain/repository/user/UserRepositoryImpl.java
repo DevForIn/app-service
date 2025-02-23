@@ -18,7 +18,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         AdminUsers adminUsers;
         adminUsers = jpaQueryFactory.select(qAdminUsers)
                 .from(qAdminUsers)
-                .where(qAdminUsers.id.eq("cognet"))
+                .where(qAdminUsers.id.eq("test"))
                 .fetchOne();
 
         log.info(adminUsers.getId());
