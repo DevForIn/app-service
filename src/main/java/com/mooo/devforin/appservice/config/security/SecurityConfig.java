@@ -82,8 +82,7 @@ public class SecurityConfig{
 //                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .authorizeHttpRequests(auth ->
                                 auth
-//                                    .requestMatchers("/user/test","/user/join","/auth/login","/v1/assistant/*").permitAll()     // "/login", "/auth/login" 경로는 인증 없이 접근 허용
-                                    .requestMatchers("/v1/user/**").permitAll()
+                                    .requestMatchers("/api/v1/user/**").permitAll()
 //                                    .requestMatchers("/**").permitAll()
                                     .anyRequest().authenticated()       // 그 외 모든 요청은 인증 필요
                 )

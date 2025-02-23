@@ -1,10 +1,10 @@
 <configuration>
     <timestamp key="today" datePattern="yyyyMMdd"/>
+
     <!-- Application Log File setting appender -->
     <appender name="APP_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>/Users/jeongin/Desktop/LOG/app-service/app-%d{yyyyMMdd}_%i.log</fileNamePattern>
-<!--            <fileNamePattern>/LOG/app-server/app-%d{yyyyMMdd}_%i.log</fileNamePattern>-->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>1GB</maxFileSize>  <!-- 1GB를 초과하면 새로운 파일 생성 -->
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -19,7 +19,6 @@
     <appender name="ERROR_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>/Users/jeongin/Desktop/LOG/app-service/err-%d{yyyyMMdd}_%i.log</fileNamePattern>
-<!--            <fileNamePattern>/LOG/app-server/err-%d{yyyyMMdd}_%i.log</fileNamePattern>-->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>1GB</maxFileSize>  <!-- 1GB를 초과하면 새로운 파일 생성 -->
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -39,11 +38,11 @@
 
     <!-- Root Logger -->
     <root level="INFO">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="APP_LOG_FILE" />
+        <appender-ref ref="CONSOLE" /> <!-- 콘솔 로그 추가 -->
+        <appender-ref ref="APP_LOG_FILE"/>
     </root>
 
-    <!-- Error Level Logger (ERROR 이상 레벨만 ERROR_LOG_FILE에 기록) -->
+    <!-- Error Logger 설정: ERROR 이상 레벨만 ERROR_LOG_FILE에 기록 -->
     <logger name="com.mooo.devforin" level="ERROR">
         <appender-ref ref="ERROR_LOG_FILE"/>
     </logger>

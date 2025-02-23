@@ -41,10 +41,7 @@ token:
 #    time: 300000
 #    time : 5000
   secret : thisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkeythisissecretkey
-
-jasypt:
-  encryptor:
-    password: "Make-APP-DevForIn"
+#
 
 api:
 #Swagger
@@ -64,3 +61,7 @@ springdoc:
   paths-to-match:
     - /**
     - /api/v1/auth/login
+
+jasypt:
+  encryptor:
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}

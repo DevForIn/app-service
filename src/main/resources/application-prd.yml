@@ -43,4 +43,5 @@ token:
 
 jasypt:
   encryptor:
-    password: "Make-APP-DevForIn"
+    password: ${JASYPT_ENCRYPTOR_PASSWORD}
+
