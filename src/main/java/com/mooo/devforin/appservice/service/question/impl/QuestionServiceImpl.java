@@ -20,7 +20,7 @@ public class QuestionServiceImpl implements QuestionService {
     private static final String DEEPSEEK_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
     @Value("${openAI.API.KEY}")
-    private String API_KEY = "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";
+    private String API_KEY;
 
     @Override
     public String askQuestion(QuestionRequestDto requestDto, UserDetails user) {
