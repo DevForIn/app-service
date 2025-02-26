@@ -1,19 +1,19 @@
 package com.mooo.devforin.appservice.domain.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name = "admin_users")
-public class AdminUsers {
+@Table(name = "users")
+public class User {
 
     @Id
     @Column
@@ -25,8 +25,12 @@ public class AdminUsers {
     @Column
     private String username;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
+
+
     @Builder
-    public AdminUsers(String id, String password, String username) {
+    public User(String id, String password, String username) {
         this.id = id;
         this.password = password;
         this.username = username;

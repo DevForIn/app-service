@@ -3,7 +3,7 @@ package com.mooo.devforin.appservice.controller.user;
 import com.mooo.devforin.appservice.config.global.ResponseDTO;
 import com.mooo.devforin.appservice.config.global.ResponseUtil;
 import com.mooo.devforin.appservice.controller.user.dto.UserJoinInfoDTO;
-import com.mooo.devforin.appservice.domain.entity.AdminUsers;
+import com.mooo.devforin.appservice.domain.entity.User;
 import com.mooo.devforin.appservice.service.authorization.impl.UserDetailsServiceImpl;
 import com.mooo.devforin.appservice.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +26,12 @@ public class UserController {
 
     @PostMapping("/insert-user")
     public ResponseDTO insertUser(@RequestBody UserJoinInfoDTO dto){
-        AdminUsers adminUsers = userDetailsService.insertUser(dto);
+        User user = userDetailsService.insertUser(dto);
 
-        if(adminUsers == null){
+        if(user == null){
             return ResponseUtil.ERROR(400,"User 생성 실패",null);
         }else {
-            return ResponseUtil.SUCCESS(201,"User 생성 성공","ID : "+adminUsers.getId());
+            return ResponseUtil.SUCCESS(201,"User 생성 성공","ID : "+ user.getId());
         }
     }
 
