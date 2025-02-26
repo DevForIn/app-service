@@ -54,6 +54,4 @@ public class QuestionController {
     public void test(){
         log.info("인증 성공");
     }
-
-
 }

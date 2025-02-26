@@ -2,7 +2,7 @@ package com.mooo.devforin.appservice.service.authorization.impl;
 
 import com.mooo.devforin.appservice.config.global.CustomUserDetails;
 import com.mooo.devforin.appservice.controller.user.dto.UserJoinInfoDTO;
-import com.mooo.devforin.appservice.domain.entity.User;
+import com.mooo.devforin.appservice.domain.entity.AdminUsers;
 import com.mooo.devforin.appservice.domain.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
