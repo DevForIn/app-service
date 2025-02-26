@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
 @EnableEncryptableProperties
-@EntityScan({"com.mooo.devforin.appservice.domain.entity",})
+@EntityScan({"com.mooo.devforin.appservice.domain.entity"})
 public class AppServiceApplication {
 
     public static void main(String[] args) {

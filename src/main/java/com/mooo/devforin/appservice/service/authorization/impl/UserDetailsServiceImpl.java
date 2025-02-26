@@ -4,6 +4,7 @@ import com.mooo.devforin.appservice.config.global.CustomUserDetails;
 import com.mooo.devforin.appservice.controller.user.dto.UserJoinInfoDTO;
 import com.mooo.devforin.appservice.domain.entity.User;
 import com.mooo.devforin.appservice.domain.repository.user.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -24,6 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public CustomUserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
 
         // DB에서 사용자 이름으로 사용자 검색
@@ -36,6 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new CustomUserDetails(user.getId(), user.getUsername(), user.getPassword(), authorities);  // 사용자 정보를 UserDetails 객체로 반환
     }
 
+    @Transactional
     public User insertUser(UserJoinInfoDTO dto) {
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

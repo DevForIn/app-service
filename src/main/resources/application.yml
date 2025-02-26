@@ -65,3 +65,7 @@ springdoc:
 jasypt:
   encryptor:
     password: ${JASYPT_ENCRYPTOR_PASSWORD}
+
+openAI:
+  API:
+    KEY: ENC(SkhPphOkItfUa86y4Pf5Ui5ZatkAh0i1KJmLGXODMPakS6/d7oHTkgPElwfEyvVuarTwsPVJq5jDQgmeqOSUqbJ19P3Rxob3zWXqc4PU+EW2pmPuZeHfPSV1p8PZS11NZsqo1IHfpkbVtVrYrfvAmJLUUi1jBHM0wRmt3UvgE4OtS1E5Y7/wldbNVWvpoaiVNtowj3diB5lKeu2rXXmCF2pE4pCzp4nbAqjHj6DX5Kc=)
