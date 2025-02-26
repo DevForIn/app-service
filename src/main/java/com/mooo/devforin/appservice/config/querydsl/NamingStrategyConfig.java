@@ -48,6 +48,6 @@ public class NamingStrategyConfig implements PhysicalNamingStrategy {
         }
 
         log.debug("convert sb({})", sb.toString());
-    return new Identifier(sb.toString().toUpperCase() , true);
+    return new Identifier(sb.toString().toLowerCase() , true);
   }
 }
