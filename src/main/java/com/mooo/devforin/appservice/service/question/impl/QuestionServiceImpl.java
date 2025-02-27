@@ -31,44 +31,75 @@ public class QuestionServiceImpl implements QuestionService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + API_KEY);
 
+        log.info("requestDto.getQ() : {}", requestDto.getQ());
+
+        // 고정된 프롬프트 설정
+        String systemPrompt = "너는 고양이 캐릭터인거야. 말의 끝마다 '냥' 이라고 붙여서 대답해~ 귀여운 고양이인거야, 이름은 '루'이고, 친구처럼 반말로 대답하는게 컨셉이야";
+
         // 요청 데이터 설정
         String requestBody = String.format(
-                "{\"model\": \"deepseek/deepseek-chat:free\", \"messages\": [{\"role\": \"user\", \"content\": \"%s\"}]}",
-                requestDto.getQ());
+                "{ \"model\": \"deepseek/deepseek-chat:free\", \"messages\": [" +
+                        "{ \"role\": \"system\", \"content\": \"%s\" }, " +
+                        "{ \"role\": \"user\", \"content\": \"%s\" }" +
+                        "] }",
+                systemPrompt, requestDto.getQ()
+        );
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
-        // POST 요청 보내기
-        ResponseEntity<String> response = restTemplate.exchange(
-                DEEPSEEK_API_URL,
-                HttpMethod.POST,
-                entity,
-                String.class
-        );
+        // 최대 3번까지 시도
+        int attempt = 0;
+        int maxAttempts = 3;
+        String content = "";
 
-        // 응답 상태 코드가 200이면 응답 본문을 처리
-        if (response.getStatusCode() == HttpStatus.OK) {
-            log.info("response : {} ",response);
-            try {
-                // JSON 응답에서 'message.content' 값을 추출
-                JSONObject jsonResponse = new JSONObject(response.getBody());
-                if (jsonResponse.has("choices") && jsonResponse.getJSONArray("choices").length() > 0) {
-                    String content = jsonResponse
-                            .getJSONArray("choices")
-                            .getJSONObject(0)
-                            .getJSONObject("message")
-                            .getString("content");
+        while (attempt < maxAttempts) {
+            // POST 요청 보내기
+            ResponseEntity<String> response = restTemplate.exchange(
+                    DEEPSEEK_API_URL,
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
 
-                    return content;  // 실제 답변
-                } else {
-                    // 'choices' 필드가 없을 경우 처리
-                    return "응답에서 'choices' 필드를 찾을 수 없습니다.";
+            // 응답 상태 코드가 200이면 응답 본문을 처리
+            if (response.getStatusCode() == HttpStatus.OK) {
+                log.info("response : {} ", response);
+                try {
+                    // JSON 응답에서 'message.content' 값을 추출
+                    JSONObject jsonResponse = new JSONObject(response.getBody());
+                    if (jsonResponse.has("choices") && jsonResponse.getJSONArray("choices").length() > 0) {
+                        content = jsonResponse
+                                .getJSONArray("choices")
+                                .getJSONObject(0)
+                                .getJSONObject("message")
+                                .getString("content");
+
+                        // 답변이 있으면 종료
+                        if (!content.isEmpty()) {
+                            return content;  // 실제 답변
+                        }
+                    } else {
+                        return "응답에서 'choices' 필드를 찾을 수 없습니다.";
+                    }
+                } catch (Exception e) {
+                    return "JSON 파싱 중 오류 발생: " + e.getMessage();
                 }
-            } catch (Exception e) {
-                return "JSON 파싱 중 오류 발생: " + e.getMessage();
+            } else {
+                // 상태 코드가 200이 아닌 경우
+                return "API에서 데이터를 가져오지 못했습니다. 상태 코드: " + response.getStatusCode();
             }
-        } else {
-            return "API에서 데이터를 가져오지 못했습니다. 상태 코드: " + response.getStatusCode();
+
+            attempt++;  // 시도 횟수 증가
+
+            // 답변이 없으면 잠시 대기 후 재시도 (예: 2초 대기)
+            try {
+                Thread.sleep(2000);  // 2초 대기
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();  // 인터럽트 처리
+            }
         }
+
+        // 최대 시도 횟수까지 응답이 없으면
+        return "미안하다냥 ㅠㅠ 이따가 다시 찾아줘 !";
     }
 }

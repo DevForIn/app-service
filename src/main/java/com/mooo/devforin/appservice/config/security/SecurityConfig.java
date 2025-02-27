@@ -86,12 +86,12 @@ public class SecurityConfig{
 
         http
                 .csrf(csrf -> csrf.disable())   // CSRF(Cross-Site Request Forgery) 보호 비활성화
-//                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .authorizeHttpRequests(auth ->
                                 auth
-                                    .requestMatchers("/api/v1/user/**").permitAll()
+                                        .requestMatchers("/v1/user/**","/api/v1/kblink/**").permitAll()
 //                                    .requestMatchers("/**").permitAll()
-                                    .anyRequest().authenticated()       // 그 외 모든 요청은 인증 필요
+                                        .anyRequest().authenticated()       // 그 외 모든 요청은 인증 필요
                 )
 //                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 관리 비활성화(JWT 사용을 위한 무상태 설정)
                 .exceptionHandling(exception -> exception
@@ -109,7 +109,7 @@ public class SecurityConfig{
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*")); // 허용할 출처 설정
+        configuration.setAllowedOriginPatterns(Arrays.asList("*")); // 허용할 출처 설정
         configuration.setAllowedMethods(Arrays.asList("*")); // 허용할 HTTP 메서드
         configuration.setAllowCredentials(true); // 자격 증명 허용
         configuration.setAllowedHeaders(Arrays.asList("*")); // 허용할 헤더 설정
@@ -118,5 +118,6 @@ public class SecurityConfig{
         source.registerCorsConfiguration("/**", configuration); // 모든 경로에 대해 CORS 설정 적용
         return source;
     }
+
 }
 

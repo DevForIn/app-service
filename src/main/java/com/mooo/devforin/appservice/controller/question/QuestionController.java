@@ -43,7 +43,6 @@ public class QuestionController {
 
 
         String response = questionService.askQuestion(requestDto, user);
-        log.info("response : {} ", response);
 
         return ResponseUtil.SUCCESS(ApiResponseStatus.SUCCESS.getCode(),ApiResponseStatus.SUCCESS.getMessage(), response);
     }
