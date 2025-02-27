@@ -1,5 +1,5 @@
 server:
-  port: 8080  # 원하는 포트 번호로 설정
+  port: 8090  # 원하는 포트 번호로 설정
 spring:
   application:
     name: underwriting-service
