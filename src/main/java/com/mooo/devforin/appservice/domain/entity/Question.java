@@ -1,6 +1,5 @@
 package com.mooo.devforin.appservice.domain.entity;
 
-import com.mooo.devforin.appservice.domain.entity.User;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -21,24 +20,29 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", updatable = false)
+    private String userId;
 
     @Column(nullable = false)
     private String question;
 
-    @Column(columnDefinition = "jsonb", nullable = false)
-    private String response; // JSONB 타입
+    @Column(nullable = true)
+    private String answer; // JSONB 타입
 
     @Column(name = "created_at", updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at", updatable = false)
+    @CreationTimestamp
+    private Timestamp updatedAt;
 
     @Builder
-    public Question(User user, String question, String response) {
-        this.user = user;
+    public Question(String userId, String question, String answer, Timestamp createdAt, Timestamp updatedAt) {
+        this.userId = userId;
         this.question = question;
-        this.response = response;
+        this.answer = answer;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

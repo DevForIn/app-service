@@ -1,9 +1,14 @@
 package com.mooo.devforin.appservice.service.question.impl;
 
+import com.mooo.devforin.appservice.common.ApiResponseStatus;
+import com.mooo.devforin.appservice.config.global.CustomUserDetails;
 import com.mooo.devforin.appservice.controller.question.dto.QuestionRequestDto;
+import com.mooo.devforin.appservice.domain.entity.Question;
+import com.mooo.devforin.appservice.domain.repository.question.QuestionRepository;
 import com.mooo.devforin.appservice.service.question.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -11,10 +16,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
+
+    private final QuestionRepository questionRepository;
 
 //    private static final String OPENAI_API_URL = "https://api.openai.com/v1/completions";
     private static final String DEEPSEEK_API_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -23,7 +33,24 @@ public class QuestionServiceImpl implements QuestionService {
     private String API_KEY;
 
     @Override
-    public String askQuestion(QuestionRequestDto requestDto, UserDetails user) {
+    public Question createQuestion(QuestionRequestDto requestDto, UserDetails user) {
+
+        if(ObjectUtils.isEmpty(requestDto.getQ())){
+            throw new IllegalArgumentException("requestDto { q } cannot be null");
+        }
+
+        // User 정보 get
+        CustomUserDetails customUserDetails = (CustomUserDetails) user;
+
+        return questionRepository.save(Question.builder()
+                .userId(customUserDetails.getId())
+                .question(requestDto.getQ())
+                .createdAt(Timestamp.valueOf(LocalDateTime.now()))
+                .build());
+    }
+
+    @Override
+    public String answerQuestion(Question question) {
         RestTemplate restTemplate = new RestTemplate();
 
         // 헤더 설정
@@ -31,7 +58,7 @@ public class QuestionServiceImpl implements QuestionService {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + API_KEY);
 
-        log.info("requestDto.getQ() : {}", requestDto.getQ());
+        log.info("requestDto.getQ() : {}", question.getQuestion());
 
         // 고정된 프롬프트 설정
         String systemPrompt = "너는 고양이 캐릭터인거야. 말의 끝마다 '냥' 이라고 붙여서 대답해~ 귀여운 고양이인거야, 이름은 '루'이고, 친구처럼 반말로 대답하는게 컨셉이야";
@@ -42,7 +69,7 @@ public class QuestionServiceImpl implements QuestionService {
                         "{ \"role\": \"system\", \"content\": \"%s\" }, " +
                         "{ \"role\": \"user\", \"content\": \"%s\" }" +
                         "] }",
-                systemPrompt, requestDto.getQ()
+                systemPrompt, question.getQuestion()
         );
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
@@ -76,6 +103,11 @@ public class QuestionServiceImpl implements QuestionService {
 
                         // 답변이 있으면 종료
                         if (!content.isEmpty()) {
+
+                            question.setAnswer(content);
+                            question.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
+                            questionRepository.save(question);
+
                             return content;  // 실제 답변
                         }
                     } else {
@@ -99,7 +131,11 @@ public class QuestionServiceImpl implements QuestionService {
             }
         }
 
-        // 최대 시도 횟수까지 응답이 없으면
+        // 최대 시도 횟수까지 응답이 없으면 시스템 에러 및 고정 답변 출력
+        question.setAnswer(ApiResponseStatus.ERROR_CASE_UNKNOWN.getMessage());
+        question.setUpdatedAt(Timestamp.valueOf(LocalDateTime.now()));
+        questionRepository.save(question);
+
         return "미안하다냥 ㅠㅠ 이따가 다시 찾아줘 !";
     }
 }

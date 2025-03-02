@@ -1,5 +1,6 @@
 package com.mooo.devforin.appservice.config.handler;
 
+import com.mooo.devforin.appservice.common.ApiResponseStatus;
 import com.mooo.devforin.appservice.config.global.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,20 @@ public class GlobalExceptionHandler {
         log.error(ex.getMessage());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(500));
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> illegalArgumentException(Exception ex) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+
+        errorResponse.setStatus("ERROR");
+        errorResponse.setCode(ApiResponseStatus.INTERNAL_SERVER_ERROR.getCode()); //"에러 코드 ex) 500, 501..."
+        errorResponse.setMessage(ApiResponseStatus.INTERNAL_SERVER_ERROR.getMessage());
+        errorResponse.setData(ex.getMessage());
+
+        log.error(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ApiResponseStatus.INTERNAL_SERVER_ERROR.getCode()));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
